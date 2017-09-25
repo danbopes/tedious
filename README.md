@@ -22,6 +22,7 @@ See the [changelog](http://tediousjs.github.io/tedious/changelog.html) for versi
 - TDS 7.3.A (SQL Server 2008)
 - TDS 7.2 (SQL Server 2005)
 - TDS 7.1 (SQL Server 2000)
+- TDS 7.0 (SQL Server 7)
 
 ## Installation
 

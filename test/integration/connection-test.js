@@ -337,9 +337,17 @@ exports.integratedAuthNtlmUpper = function(test) {
 };
 
 exports.encrypt = function(test) {
+  var config = getConfig();
+
+  if (config.options.tdsVersion < '7_1') {
+    // Encryption not supported on SQL Server 7
+    console.log('Skipping encrypt test');
+    test.done();
+    return;
+  }
+
   test.expect(5);
 
-  var config = getConfig();
   config.options.encrypt = true;
 
   var connection = new Connection(config);
@@ -781,14 +789,16 @@ exports.rowCollectionOnRequestCompletion = function(test) {
     rowCount,
     rows
   ) {
-    test.strictEqual(rows.length, 2);
-
-    test.strictEqual(rows[0][0].metadata.colName, 'a');
-    test.strictEqual(rows[0][0].value, 1);
-    test.strictEqual(rows[1][0].metadata.colName, 'b');
-    test.strictEqual(rows[1][0].value, 2);
-
-    connection.close();
+    try {
+      test.strictEqual(rows.length, 2);
+      
+      test.strictEqual(rows[0][0].metadata.colName, 'a');
+      test.strictEqual(rows[0][0].value, 1);
+      test.strictEqual(rows[1][0].metadata.colName, 'b');
+      test.strictEqual(rows[1][0].value, 2);
+    } finally {
+      connection.close();
+    }
   });
 
   var connection = new Connection(config);

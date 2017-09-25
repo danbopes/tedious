@@ -1,4 +1,5 @@
 const versions = module.exports.versions = {
+  '7_0': 0x7000000,
   '7_1': 0x71000001,
   '7_2': 0x72090002,
   '7_3_A': 0x730A0003,

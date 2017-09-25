@@ -153,7 +153,7 @@ module.exports = class Login7Payload {
 
   createVariableData(offset) {
     this.variableLengthsLength = (9 * 4) + 6 + (3 * 4) + 4;
-    if (this.loginData.tdsVersion === '7_1') {
+    if (this.loginData.tdsVersion <= '7_1') {
       this.variableLengthsLength = (9 * 4) + 6 + (2 * 4);
     }
     const variableData = {

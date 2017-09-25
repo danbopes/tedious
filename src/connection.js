@@ -1062,6 +1062,9 @@ class Connection extends EventEmitter {
   }
 
   execSql(request) {
+    if (this.config.options.tdsVersion < '7_1') {
+      return this.execSqlBatch(request);
+    }
     request.transformIntoExecuteSqlRpc();
     if (request.error != null) {
       return process.nextTick(() => {
@@ -1340,8 +1343,14 @@ Connection.prototype.STATE = {
         return this.transitionTo(this.STATE.FINAL);
       },
       socketConnect: function() {
-        this.sendPreLogin();
-        return this.transitionTo(this.STATE.SENT_PRELOGIN);
+        if ( this.config.options.tdsVersion < '7_1' ) {
+          this.sendLogin7Packet(() => {
+            return this.transitionTo(this.STATE.SENT_LOGIN7_WITH_STANDARD_LOGIN);
+          });
+        } else {
+          this.sendPreLogin();
+          return this.transitionTo(this.STATE.SENT_PRELOGIN);
+        }
       }
     }
   },

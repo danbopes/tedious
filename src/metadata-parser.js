@@ -56,7 +56,7 @@ function readScale(parser, type, callback) {
 }
 
 function readCollation(parser, type, callback) {
-  if (type.hasCollation) {
+  if (parser.options.tdsVersion > '7_0' && type.hasCollation) {
     // s2.2.5.1.2
     parser.readBuffer(5, (collationData) => {
       const collation = {};

@@ -177,7 +177,7 @@ function valueParse(parser, metaData, options, callback) {
 
         case 'VarChar':
         case 'Char':
-          const codepage = metaData.collation.codepage;
+          const codepage = metaData.collation !== undefined ? metaData.collation.codepage : null;
           if (metaData.dataLength === MAX) {
             return readMaxChars(parser, codepage, callback);
           } else {
@@ -204,7 +204,7 @@ function valueParse(parser, metaData, options, callback) {
           if (textPointerNull) {
             return callback(null);
           } else {
-            return readChars(parser, dataLength, metaData.collation.codepage, callback);
+            return readChars(parser, dataLength, metaData.collation !== undefined ? metaData.collation.codepage : null, callback);
           }
 
         case 'NText':

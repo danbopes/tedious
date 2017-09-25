@@ -579,9 +579,12 @@ exports.execSqlWithOrder = function(test) {
   test.expect(10);
 
   var config = getConfig();
-
-  var sql =
-    'select top 2 object_id, name, column_id, system_type_id from sys.columns order by name, system_type_id';
+  
+  var sql = config.tdsVersion < '7_1'
+    ?
+      'select top 2 id, name, colid, type from syscolumns order by name, type'
+    :
+      'select top 2 object_id, name, column_id, system_type_id from sys.columns order by name, system_type_id';
   var request = new Request(sql, function(err, rowCount) {
     test.ifError(err);
     test.strictEqual(rowCount, 2);
@@ -623,11 +626,11 @@ exports.execSqlWithOrder = function(test) {
   });
 
   connection.on('errorMessage', function(error) {
-    //console.log("#{error.number} : #{error.message}")
+    console.log(`#${error.number} : #${error.message}`)
   });
 
   connection.on('debug', function(text) {
-    //console.log(text)
+    console.log(text)
   });
 };
 

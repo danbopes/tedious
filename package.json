@@ -72,7 +72,6 @@
     "pretest-integration": "eslint src test",
     "test-integration": "nodeunit --reporter minimal test/setup.js test/integration/",
     "build": "rimraf lib && babel src --out-dir lib",
-    "prepare": "npm run build",
     "prepublish": "npm run build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
